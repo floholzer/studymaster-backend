@@ -9,5 +9,4 @@ public class StudymasterBackendApplication {
     public static void main(String[] args) {
         SpringApplication.run(StudymasterBackendApplication.class, args);
     }
-
 }
