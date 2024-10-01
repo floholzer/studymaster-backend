@@ -24,8 +24,8 @@ public class UserBadgeService {
 
     public Optional<UserBadge> updateUserBadge(Long id, UserBadge userBadgeDetails) {
         return userBadgeRepository.findById(id).map(userBadge -> {
-            userBadge.setBadge_id(userBadgeDetails.getBadge_id());
-            userBadge.setUser_id(userBadgeDetails.getUser_id());
+            userBadge.setBadgeId(userBadgeDetails.getBadgeId());
+            userBadge.setUserId(userBadgeDetails.getUserId());
             userBadge.setAwarded_at(userBadgeDetails.getAwarded_at());
             return userBadgeRepository.save(userBadge);
         });
