@@ -14,8 +14,7 @@ public class Task {
     @Id
     private Long id;
 
-    @Column("user_id")  // Verweis auf den Benutzer in der Tabelle `tasks`
-    private Long userId;
+    private Long user_id;  // No need for @Column if the name matches the DB
 
     private String title;
     private String description;

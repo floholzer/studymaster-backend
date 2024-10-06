@@ -32,9 +32,11 @@ public class UserController {
         Optional<User> user = userService.findUserByEmail(email);
 
         if (user.isPresent() && user.get().getPassword().equals(password)) {
-            return ResponseEntity.ok("Login erfolgreich");
+            // Add session handling logic
+            String sessionId = userService.createSession(user.get());
+            return ResponseEntity.ok(sessionId);  // return session ID
         } else {
-            return ResponseEntity.status(401).body("Ungültige Anmeldedaten");
+            return ResponseEntity.status(401).body("Invalid credentials");
         }
     }
 
