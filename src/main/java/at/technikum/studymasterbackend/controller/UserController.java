@@ -5,7 +5,6 @@ import at.technikum.studymasterbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,7 +31,7 @@ public class UserController {
         Optional<User> user = userService.findUserByEmail(email);
 
         if (user.isPresent() && user.get().getPassword().equals(password)) {
-            return ResponseEntity.ok("Login erfolgreich");
+            return ResponseEntity.ok(user.get());
         } else {
             return ResponseEntity.status(401).body("Ungültige Anmeldedaten");
         }
@@ -43,4 +42,15 @@ public class UserController {
     public ResponseEntity<?> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
+
+//    // Alle Benutzer abrufen (Optional: nur für Admins)
+//    @GetMapping("/getAll")
+//    public ResponseEntity<?> getAllUsers(@RequestParam Long userId) {
+//        Optional<User> user = userService.getUserById(userId);
+//        if (user.isPresent() && Boolean.TRUE.equals(user.get().getIs_admin())) {
+//            return ResponseEntity.ok(userService.getAllUsers());
+//        } else {
+//            return ResponseEntity.status(403).body("Zugriff verweigert");
+//        }
+//    }
 }

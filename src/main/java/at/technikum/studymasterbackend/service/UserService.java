@@ -32,6 +32,8 @@ public class UserService {
 
     // Benutzer registrieren
     public User registerUser(User user) {
+        // Überschreibe is_admin, um sicherzustellen, dass neue Benutzer keine Admins sind
+        user.setIs_admin(false);
         return userRepository.save(user);
     }
 
