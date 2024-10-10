@@ -25,13 +25,16 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     // Benutzer registrieren
-    public User registerUser(User user) {
+    @PostMapping("/register")  // Füge die PostMapping-Annotation hinzu
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
         // Passwort hashen
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // Überschreibe is_admin, um sicherzustellen, dass neue Benutzer keine Admins sind
         user.setIs_admin(false);
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        return ResponseEntity.ok(savedUser);  // Rückgabe des registrierten Benutzers
     }
+
 
     // Alle Benutzer abrufen
     @GetMapping("/getAll")
