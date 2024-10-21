@@ -1,6 +1,10 @@
 package at.technikum.studymasterbackend.util;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import java.security.Key;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import java.util.Date;
@@ -8,7 +12,8 @@ import java.util.Date;
 @Component
 public class JWTUtil {
 
-    private final String SECRET_KEY = "dein_geheimes_schluessel"; // Verwende einen sicheren Schlüssel
+    // Generiert einen geheimen Schlüssel mit HS256
+    private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     // Extrahiert den Benutzernamen aus dem Token
     public String extractUsername(String token) {
@@ -32,12 +37,13 @@ public class JWTUtil {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // Token gültig für 1 Stunde
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SECRET_KEY) // Signiert das Token mit dem geheimen Schlüssel
                 .compact();
     }
 
     // Extrahiert alle Claims aus dem Token
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        // Verwende parserBuilder statt parser für neuere JJWT-Versionen
+        return Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token).getBody();
     }
 }
