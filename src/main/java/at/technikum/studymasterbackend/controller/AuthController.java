@@ -9,9 +9,11 @@ import org.springframework.http.*;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:5173")  // Erlaubt Anfragen von deinem Vue.js-Frontend
 public class AuthController {
 
     @Autowired
