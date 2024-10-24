@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5174")  // Erlaubt Anfragen von deinem Vue.js-Frontend
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 
     @Autowired
@@ -23,6 +23,7 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {

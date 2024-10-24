@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:5173")  // Erlaubt Anfragen von deinem Vue.js-Frontend
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     @Autowired
