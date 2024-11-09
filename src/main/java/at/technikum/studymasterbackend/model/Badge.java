@@ -13,4 +13,6 @@ public class Badge {
     private String name;
     private String description;
     private int points_required;
+    private String badgeType;
+
 }

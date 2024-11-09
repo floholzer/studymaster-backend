@@ -44,4 +44,17 @@ public class TaskController {
         taskService.deleteTask(id);
         return ResponseEntity.ok("Task deleted");
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> testEndpoint() {
+        return ResponseEntity.ok("Access granted");
+    }
+
+    // Mark a task as completed and award points
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<Task> markTaskAsCompleted(@PathVariable Long id, @RequestParam int pointsPerCompletion) {
+        Optional<Task> task = taskService.markTaskAsCompleted(id, pointsPerCompletion);
+        return task.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(404).build());
+    }
 }
