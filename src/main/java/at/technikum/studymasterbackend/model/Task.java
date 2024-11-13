@@ -44,4 +44,8 @@ public class Task {
 
     private int pointsEarned;
 
+    @Column("subject_id")
+    private Long subjectId = null; // Change from int to Long to handle null values. Default to null instead of 0.
+
+
 }
