@@ -17,8 +17,8 @@ public class TaskController {
     private TaskService taskService;
 
     // Retrieve all tasks for a user
-    @GetMapping
-    public ResponseEntity<List<Task>> getTasks(@RequestParam Long userId) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<Task>> getTasks(@PathVariable Long userId) {
         List<Task> tasks = taskService.getTasksByUserId(userId);
         return ResponseEntity.ok(tasks);
     }
