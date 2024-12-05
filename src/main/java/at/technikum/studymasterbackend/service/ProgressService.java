@@ -18,4 +18,17 @@ public class ProgressService {
         Progress progress = progressRepository.getProgressByUserId(userId);
         return progress != null ? progress.getProgress_percentage() : 0.0;
     }
+
+    public void addProgressPoints(Long userId, double points) {
+        Progress progress = progressRepository.getProgressByUserId(userId);
+        if (progress == null) {
+            progress = new Progress();
+            progress.setUserId(userId);
+            progress.setProgress_percentage(points);
+            progress.setProgress_percentage(0.0);
+        } else {
+            progress.setProgress_percentage(progress.getProgress_percentage() + points);
+        }
+        progressRepository.save(progress);
+    }
 }

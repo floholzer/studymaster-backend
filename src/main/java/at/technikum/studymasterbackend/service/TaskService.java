@@ -22,6 +22,7 @@ public class TaskService {
     private final SemesterRepository semesterRepository;
     private final BadgeRepository badgeRepository;
     private final UserBadgeRepository userBadgeRepository;
+    private final ProgressService progressService;
 
     @Autowired
     public TaskService(
@@ -29,12 +30,14 @@ public class TaskService {
             SubjectRepository subjectRepository,
             SemesterRepository semesterRepository,
             BadgeRepository badgeRepository,
-            UserBadgeRepository userBadgeRepository) {
+            UserBadgeRepository userBadgeRepository,
+            ProgressService progressService) {
         this.taskRepository = taskRepository;
         this.subjectRepository = subjectRepository;
         this.semesterRepository = semesterRepository;
         this.badgeRepository = badgeRepository;
         this.userBadgeRepository = userBadgeRepository;
+        this.progressService = progressService;
     }
 
     // Retrieve all tasks for a user
@@ -94,6 +97,9 @@ public class TaskService {
             task.setPointsEarned(task.getPointsEarned() + pointsPerCompletion);
 
             logger.info("Marking task ID: {} as completed. Total points earned: {}", id, task.getPointsEarned());
+
+            // Handle Progress
+            progressService.addProgressPoints(task.getUserId(), pointsPerCompletion);
 
             // Handle badges
             // handleBadges(task); TODO fix this
