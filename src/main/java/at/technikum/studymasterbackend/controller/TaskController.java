@@ -1,5 +1,6 @@
 package at.technikum.studymasterbackend.controller;
 
+import at.technikum.studymasterbackend.model.PointsPerCompletion;
 import at.technikum.studymasterbackend.model.Task;
 import at.technikum.studymasterbackend.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +52,9 @@ public class TaskController {
     }
 
     // Mark a task as completed and award points
-    @PatchMapping("/{id}/complete")
-    public ResponseEntity<Task> markTaskAsCompleted(@PathVariable Long id, @RequestParam int pointsPerCompletion) {
-        Optional<Task> task = taskService.markTaskAsCompleted(id, pointsPerCompletion);
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Task> markTaskAsCompleted(@PathVariable Long id, @RequestBody PointsPerCompletion pointsPerCompletion) {
+        Optional<Task> task = taskService.markTaskAsCompleted(id, pointsPerCompletion.ects);
         return task.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(404).build());
     }

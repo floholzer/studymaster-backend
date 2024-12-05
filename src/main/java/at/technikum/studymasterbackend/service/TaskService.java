@@ -96,7 +96,7 @@ public class TaskService {
             logger.info("Marking task ID: {} as completed. Total points earned: {}", id, task.getPointsEarned());
 
             // Handle badges
-            handleBadges(task);
+            // handleBadges(task); TODO fix this
 
             return taskRepository.save(task);
         });

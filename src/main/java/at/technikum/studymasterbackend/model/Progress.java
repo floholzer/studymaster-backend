@@ -11,7 +11,7 @@ public class Progress {
     @Id
     private Long id;
     @Column("user_id")
-    private Long user_id;
+    private Long userId;
     @Column("task_id")
     private Long task_id;
     private double progress_percentage;
