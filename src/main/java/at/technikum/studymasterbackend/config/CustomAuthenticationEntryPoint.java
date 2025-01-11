@@ -21,12 +21,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
             response.setStatus(HttpServletResponse.SC_OK); // OPTIONS-Anfragen erlauben
             return;
         }
-        // Ausnahme für den /users/register-Endpunkt
-        String path = request.getRequestURI();
-        if ("/api/users/register".equals(path) || "/users/register".equals(path)) { // Je nach Route
-            response.setStatus(HttpServletResponse.SC_OK); // Anfragen erlauben
-            return;
-        }
         // Standardverhalten: 401 Unauthorized für alle anderen Anfragen
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write("{\"error\": \"Unauthorized access\"}");
