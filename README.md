@@ -2,14 +2,6 @@
 
 This is the backend service for the StudyMaster application, built with Spring Boot.
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Usage](#usage)
-- [Endpoints](#endpoints)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
