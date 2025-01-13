@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
 

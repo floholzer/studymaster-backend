@@ -9,7 +9,7 @@ import at.technikum.studymasterbackend.model.Badge;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/badges")
+@RequestMapping("/badges")
 public class BadgeController {
 
     @Autowired
