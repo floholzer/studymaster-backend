@@ -31,6 +31,19 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
+
+        if (user.getUsername() == null || user.getUsername().isEmpty() ||
+                user.getPassword() == null || user.getPassword().isEmpty() ||
+                user.getEmail() == null || user.getEmail().isEmpty() ||
+                user.getFirst_name() == null || user.getFirst_name().isEmpty() ||
+                user.getLast_name() == null || user.getLast_name().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("All fields are required");
+        }
+
+        if (!user.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email format");
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setIs_admin(false);
         User savedUser = userRepository.save(user);
