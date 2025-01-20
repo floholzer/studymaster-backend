@@ -19,8 +19,8 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.createSubject(subject));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Subject>> getSubjects(@RequestParam Long semesterId) {
+    @GetMapping("/{semesterId}")
+    public ResponseEntity<List<Subject>> getSubjects(@PathVariable Long semesterId) {
         return ResponseEntity.ok(subjectService.getSubjectsBySemesterId(semesterId));
     }
 }

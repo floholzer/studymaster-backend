@@ -19,8 +19,8 @@ public class SemesterController {
         return ResponseEntity.ok(semesterService.createSemester(semester));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Semester>> getSemesters(@RequestParam Long userId) {
+    @GetMapping("/{userId}")
+    public ResponseEntity<List<Semester>> getSemesters(@PathVariable Long userId) {
         return ResponseEntity.ok(semesterService.getSemestersByUserId(userId));
     }
 }
