@@ -108,17 +108,36 @@ public class TaskService {
         });
     }
 
+    private String calculateAward(double percentage) {
+        if (percentage < 50) {
+            return "Keinen";
+        } else if (percentage < 60) {
+            return "Holz";
+        } else if (percentage < 80) {
+            return "Bronze";
+        } else if (percentage < 90) {
+            return "Silber";
+        } else {
+            return "Gold";
+        }
+    }
+
     private void handleBadges(Task task) {
         Long subjectId = task.getSubjectId();
-        Long userId = task.getUserId();
 
-        // Check subject completion for mini badge
+        // Prüfen, ob alle Tasks des Subjects abgeschlossen sind
         List<Task> subjectTasks = taskRepository.findBySubjectId(subjectId);
         if (subjectTasks.stream().allMatch(t -> "completed".equals(t.getStatus()))) {
-            awardMiniBadge(subjectId);
+            // Berechnung der Punktprozente und Award-Vergabe
+            int totalPoints = subjectTasks.stream().mapToInt(Task::getPointsPossible).sum();
+            int earnedPoints = subjectTasks.stream().mapToInt(Task::getPointsEarned).sum();
+            double percentage = (totalPoints > 0) ? (earnedPoints * 100.0 / totalPoints) : 0.0;
+
+            String award = calculateAward(percentage);
+            awardSubjectBadge(subjectId, award);
         }
 
-        // Check semester completion for big badge
+        // Prüfen, ob das Semester abgeschlossen ist und Big Badge vergeben
         Long semesterId = subjectRepository.findById(subjectId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid subject ID: " + subjectId))
                 .getSemesterId();
@@ -127,10 +146,18 @@ public class TaskService {
             awardBigBadge(semesterId);
         }
 
-        // Check program completion for ultra badge
-        if (areAllSemestersCompleted(userId)) {
-            awardUltraBadge(userId);
+        // Prüfen, ob alle Semester abgeschlossen sind und Ultra Badge vergeben
+        if (areAllSemestersCompleted(task.getUserId())) {
+            awardUltraBadge(task.getUserId());
         }
+    }
+
+    private void awardSubjectBadge(Long subjectId, String award) {
+        logger.info("Awarding {} badge for subject ID: {}", award, subjectId);
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new IllegalArgumentException("Subject not found: " + subjectId));
+        subject.setAward(award);
+        subjectRepository.save(subject);
     }
 
     private void awardMiniBadge(Long subjectId) {

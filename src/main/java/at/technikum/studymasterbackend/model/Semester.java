@@ -21,5 +21,7 @@ public class Semester {
     private BigDecimal ects; // Total ECTS for the semester
     @Column("created_at")
     private LocalDateTime createdAt;
+    @Column("status")
+    private String status = "open"; // Default status is 'open'
 }
 

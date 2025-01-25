@@ -47,5 +47,8 @@ public class Task {
     @Column("subject_id")
     private Long subjectId = null; // Change from int to Long to handle null values. Default to null instead of 0.
 
+    public int getPointsPossible() {
+        return pointsPerSubmission * totalSubmissions;
+    }     // Berechnung der totalen Punkte, die für die Aufgabe erreicht werden können
 
 }

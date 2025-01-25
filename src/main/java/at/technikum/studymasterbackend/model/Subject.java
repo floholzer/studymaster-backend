@@ -25,5 +25,11 @@ public class Subject {
     @Column("user_id")  // New field to link to a user
     private Long userId;
 
+    @Column("status")
+    private String status = "open"; // Default status beim Erstellen eines neuen Fachs
+
+    @Column("award")
+    private String award = "Keinen"; // Default-Wert für die Auszeichnung
+
 }
 
