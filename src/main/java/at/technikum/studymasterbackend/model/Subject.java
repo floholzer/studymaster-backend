@@ -18,7 +18,6 @@ public class Subject {
     private Long semesterId;
 
     private String name;
-    private BigDecimal ects; // ECTS for the subject
     @Column("created_at")
     private LocalDateTime createdAt;
 

@@ -18,7 +18,6 @@ public class Semester {
     private Long userId;
 
     private String name;
-    private BigDecimal ects; // Total ECTS for the semester
     @Column("created_at")
     private LocalDateTime createdAt;
     @Column("status")
