@@ -47,14 +47,14 @@ public class SubjectController {
         }
     }
 
-    @PutMapping("/subjects/{id}") //Subject aktualisieren
+    @PutMapping("/{id}") //Subject aktualisieren
     public ResponseEntity<Subject> updateSubject(@PathVariable Long id, @RequestBody Subject updatedSubject) {
         Optional<Subject> subject = subjectService.updateSubject(id, updatedSubject);
         return subject.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @DeleteMapping("/subjects/{id}") //Subject löschen
+    @DeleteMapping("/{id}") //Subject löschen
     public ResponseEntity<String> deleteSubject(@PathVariable Long id) {
         boolean isDeleted = subjectService.deleteSubject(id);
         if (isDeleted) {

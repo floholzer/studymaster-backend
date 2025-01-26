@@ -41,7 +41,7 @@ public class SemesterController {
         return ResponseEntity.ok(semesterService.getSemestersByUserIdAndStatus(userId, status));
     }
 
-    @PutMapping("/semester/{id}") // Update Semester
+    @PutMapping("/{id}") // Update Semester
     public ResponseEntity<Semester> updateSemester(@PathVariable Long id, @RequestBody Semester updatedSemester) {
         Optional<Semester> semester = semesterService.updateSemester(id, updatedSemester);
         return semester.map(ResponseEntity::ok)
