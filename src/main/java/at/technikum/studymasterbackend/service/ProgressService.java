@@ -49,5 +49,8 @@ public class ProgressService {
         if (progress.getPoints_earned() >= 100) {
             userBadgeService.assignBadgeToUser(userId, 3L);
         }
+        if (progress.getPoints_earned() >= 200) {
+            userBadgeService.assignBadgeToUser(userId, 4L);
+        }
     }
 }
