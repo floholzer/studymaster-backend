@@ -42,21 +42,17 @@ public class TaskService {
 
     // Retrieve all tasks for a user
     public List<Task> getTasksByUserId(Long userId) {
+        if(userId == null) throw new IllegalArgumentException("userId is null");
+
         logger.info("Fetching tasks for user ID: {}", userId);
         return taskRepository.findByUserId(userId);
     }
 
     // Create a new task
     public Task createTask(Task task) {
-        if (task.getStatus() == null) {
-            task.setStatus("open");
-        }
-        if (task.getEcts() == null) {
-            task.setEcts(BigDecimal.ZERO);
-        }
-        if (task.getCreatedAt() == null) {
-            task.setCreatedAt(LocalDateTime.now());
-        }
+        if (task.getStatus() == null) task.setStatus("open");
+        if (task.getEcts() == null) task.setEcts(BigDecimal.ZERO);
+        if (task.getCreatedAt() == null) task.setCreatedAt(LocalDateTime.now());
 
         Task savedTask = taskRepository.save(task);
         logger.info("Created task ID: {} for user ID: {}", savedTask.getId(), savedTask.getUserId());
@@ -65,6 +61,9 @@ public class TaskService {
 
     // Update an existing task
     public Optional<Task> updateTask(Long id, Task updatedTask) {
+        if (id == null) throw new IllegalArgumentException("id is null");
+        if (updatedTask == null) throw new IllegalArgumentException("updatedTask is null");
+
         logger.info("Updating task ID: {}", id);
         return taskRepository.findById(id).map(task -> {
             task.setTitle(updatedTask.getTitle());
@@ -73,6 +72,7 @@ public class TaskService {
             task.setStatus(updatedTask.getStatus());
             task.setPriority(updatedTask.getPriority());
             task.setEcts(updatedTask.getEcts());
+            task.setSubjectId(updatedTask.getSubjectId());
             task.setPointsPerSubmission(updatedTask.getPointsPerSubmission());
             task.setTotalSubmissions(updatedTask.getTotalSubmissions());
             task.setCompletedSubmissions(updatedTask.getCompletedSubmissions());
@@ -82,24 +82,27 @@ public class TaskService {
 
     // Delete a task
     public void deleteTask(Long id) {
+        if (id == null) throw new IllegalArgumentException("id is null");
         logger.info("Deleting task ID: {}", id);
         taskRepository.deleteById(id);
     }
 
     // Mark a task as completed and assign points
-    public Optional<Task> markTaskAsCompleted(Long id, int pointsPerCompletion) {
-        if (pointsPerCompletion < 0) {
-            throw new IllegalArgumentException("Points per completion cannot be negative.");
-        }
+    public Optional<Task> markTaskAsCompleted(Long id, int pointsEarned) {
+        if (id == null) throw new IllegalArgumentException("id is null");
+        if (pointsEarned < 0) throw new IllegalArgumentException("Points per completion cannot be negative.");
 
         return taskRepository.findById(id).map(task -> {
-            task.setStatus("completed");
-            task.setPointsEarned(task.getPointsEarned() + pointsPerCompletion);
+            if(!"open".equals(task.getStatus())) throw new IllegalArgumentException("Task is already completed: " + id);
+            if(pointsEarned > task.getPointsPerSubmission()) throw new IllegalArgumentException("Points earned are higher then possible points to earn: " + id);
 
-            logger.info("Marking task ID: {} as completed. Total points earned: {}", id, task.getPointsEarned());
+            task.setStatus("completed");
+            task.setPointsEarned(pointsEarned);
+
+            logger.info("Marking task ID: {} as completed. Total points earned: {}", id, pointsEarned);
 
             // Handle Progress
-            progressService.addProgressPoints(task.getUserId(), pointsPerCompletion);
+            progressService.addProgressPoints(task.getUserId(), pointsEarned);
 
             // Handle badges
             // handleBadges(task); TODO fix this

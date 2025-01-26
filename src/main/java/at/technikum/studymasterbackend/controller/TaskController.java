@@ -52,9 +52,9 @@ public class TaskController {
     }
 
     // Mark a task as completed and award points
-    @PostMapping("/{id}/complete")
-    public ResponseEntity<Task> markTaskAsCompleted(@PathVariable Long id, @RequestBody PointsPerCompletion pointsPerCompletion) {
-        Optional<Task> task = taskService.markTaskAsCompleted(id, pointsPerCompletion.ects); // TODO: muss in erreichte Punkte geändert werden
+    @PostMapping("/{taskId}/complete")
+    public ResponseEntity<Task> markTaskAsCompleted(@PathVariable Long taskId, @RequestBody Task requestTask) {
+        Optional<Task> task = taskService.markTaskAsCompleted(taskId, requestTask.getPointsEarned());
         return task.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(404).build());
     }

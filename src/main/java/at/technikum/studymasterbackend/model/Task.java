@@ -42,6 +42,7 @@ public class Task {
     @Column("created_at")
     private LocalDateTime createdAt; // Automatically set by the database
 
+    @Column("points_earned")
     private int pointsEarned;
 
     @Column("subject_id")

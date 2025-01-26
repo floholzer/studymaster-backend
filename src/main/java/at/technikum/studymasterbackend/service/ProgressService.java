@@ -15,19 +15,26 @@ public class ProgressService {
     }
 
     public double getProgressByUserId(Long userId) {
+        if (userId == null) throw new IllegalArgumentException("Missing userId");
+
         Progress progress = progressRepository.getProgressByUserId(userId);
         return progress != null ? progress.getProgress_percentage() : 0.0;
     }
 
-    public void addProgressPoints(Long userId, double points) {
+    // TODO rework Progress -> Woran wird der Fortschritt gemessen? Was ist die maximale Punktzahl?
+    public void addProgressPoints(Long userId, int points) {
+        if(userId == null) throw new IllegalArgumentException("UserId must not be null");
+        if(points < 0) throw new IllegalArgumentException("Points must be non-negative");
+
         Progress progress = progressRepository.getProgressByUserId(userId);
         if (progress == null) {
             progress = new Progress();
             progress.setUserId(userId);
-            progress.setProgress_percentage(points);
-            progress.setProgress_percentage(0.0);
+            progress.setPoints_earned(points);
+            progress.setProgress_percentage((double) points/100);
         } else {
-            progress.setProgress_percentage(progress.getProgress_percentage() + points);
+            progress.setPoints_earned(points);
+            progress.setProgress_percentage(progress.getProgress_percentage() + (double) points/100);
         }
         progressRepository.save(progress);
     }
