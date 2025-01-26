@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SemesterService {
@@ -32,6 +33,23 @@ public class SemesterService {
     public List<Semester> getSemestersByUserIdAndStatus(Long userId, String status) {
         return semesterRepository.findByUserIdAndStatus(userId, status);
     }
+
+    public Optional<Semester> updateSemester(Long id, Semester updatedSemester) {
+        return semesterRepository.findById(id).map(existingSemester -> {
+            existingSemester.setName(updatedSemester.getName());
+            existingSemester.setStatus(updatedSemester.getStatus()); // ich glaube mehr muss man nicht anpassen können?
+            return semesterRepository.save(existingSemester);
+        });
+    }
+
+    public boolean deleteSemester(Long id) {
+        if (semesterRepository.existsById(id)) {
+            semesterRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
 
 }
 
