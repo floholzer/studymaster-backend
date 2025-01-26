@@ -3,10 +3,12 @@ package at.technikum.studymasterbackend.controller;
 import at.technikum.studymasterbackend.model.Subject;
 import at.technikum.studymasterbackend.service.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -52,6 +54,22 @@ public ResponseEntity<?> createSubject(@RequestBody Subject subject) {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(awards);
     } //Auszeichnungen für alle Fächer eines Semesters abrufen
+
+    @PutMapping("/subjects/{id}") //Subject aktualisieren
+    public ResponseEntity<Subject> updateSubject(@PathVariable Long id, @RequestBody Subject updatedSubject) {
+        Optional<Subject> subject = subjectService.updateSubject(id, updatedSubject);
+        return subject.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    @DeleteMapping("/subjects/{id}") //Subject löschen
+    public ResponseEntity<String> deleteSubject(@PathVariable Long id) {
+        boolean isDeleted = subjectService.deleteSubject(id);
+        if (isDeleted) {
+            return ResponseEntity.ok("Subject deleted successfully.");
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Subject not found.");
+    }
 
 
 }

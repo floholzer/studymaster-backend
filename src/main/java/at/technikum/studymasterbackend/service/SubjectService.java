@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SubjectService {
@@ -78,6 +79,26 @@ public class SubjectService {
     public List<Subject> getSubjectsByAward(String award) {
         return subjectRepository.findByAward(award);
     }
+
+    public Optional<Subject> updateSubject(Long id, Subject updatedSubject) {
+        return subjectRepository.findById(id).map(existingSubject -> {
+            existingSubject.setName(updatedSubject.getName());
+            existingSubject.setSemesterId(updatedSubject.getSemesterId());
+            existingSubject.setUserId(updatedSubject.getUserId());
+            existingSubject.setStatus(updatedSubject.getStatus());
+            existingSubject.setAward(updatedSubject.getAward());
+            return subjectRepository.save(existingSubject);
+        });
+    }
+
+    public boolean deleteSubject(Long id) {
+        if (subjectRepository.existsById(id)) {
+            subjectRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
 
 }
 
