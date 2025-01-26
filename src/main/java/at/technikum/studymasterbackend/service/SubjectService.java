@@ -17,6 +17,8 @@ public class SubjectService {
 
     @Autowired
     private TaskRepository taskRepository; // Für die Abfrage von Tasks
+    @Autowired
+    private ProgressService progressService;
 
     public Subject createSubject(Subject subject) {
         return subjectRepository.save(subject);
@@ -48,12 +50,13 @@ public class SubjectService {
 
         // Calculate points
         List<Task> tasks = taskRepository.findBySubjectId(subjectId);
-        int totalPoints = tasks.stream().mapToInt(Task::getPointsPossible).sum();
+        int totalPoints = tasks.stream().mapToInt(Task::getPointsPerSubmission).sum();
         int earnedPoints = tasks.stream().mapToInt(Task::getPointsEarned).sum();
 
         // Calculate award
-        double percentage = totalPoints > 0 ? (earnedPoints * 100.0 / totalPoints) : 0;
-        subject.setAward(calculateAward(percentage));
+        long percentage = totalPoints > 0 ? Math.round(earnedPoints * 100.0 / totalPoints) : 0;
+        progressService.addProgressPoints(subject.getUserId(),(int)percentage);
+        //subject.setAward(calculateAward(percentage));
         subject.setStatus("completed");
 
         subjectRepository.save(subject);
