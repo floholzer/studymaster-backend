@@ -40,8 +40,14 @@ public class ProgressService {
         }
         progressRepository.save(progress);
 
-        if (progress.getPoints_earned() > 10) {
+        if (progress.getPoints_earned() >= 10) {
             userBadgeService.assignBadgeToUser(userId, 1L);
+        }
+        if (progress.getPoints_earned() >= 50) {
+            userBadgeService.assignBadgeToUser(userId, 2L);
+        }
+        if (progress.getPoints_earned() >= 100) {
+            userBadgeService.assignBadgeToUser(userId, 3L);
         }
     }
 }

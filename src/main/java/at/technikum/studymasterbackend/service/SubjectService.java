@@ -56,28 +56,9 @@ public class SubjectService {
         // Calculate award
         long percentage = totalPoints > 0 ? Math.round(earnedPoints * 100.0 / totalPoints) : 0;
         progressService.addProgressPoints(subject.getUserId(),(int)percentage);
-        //subject.setAward(calculateAward(percentage));
         subject.setStatus("completed");
 
         subjectRepository.save(subject);
-    }
-
-    private String calculateAward(double percentage) {
-        if (percentage < 50) {
-            return "Keinen";
-        } else if (percentage < 60) {
-            return "Holz";
-        } else if (percentage < 80) {
-            return "Bronze";
-        } else if (percentage < 90) {
-            return "Silber";
-        } else {
-            return "Gold";
-        }
-    }
-
-    public List<Subject> getSubjectsByAward(String award) {
-        return subjectRepository.findByAward(award);
     }
 
     public Optional<Subject> updateSubject(Long id, Subject updatedSubject) {

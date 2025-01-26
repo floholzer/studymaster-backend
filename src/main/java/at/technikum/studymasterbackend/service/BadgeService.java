@@ -29,15 +29,6 @@ public class BadgeService {
         return badgeRepository.findById(id).orElse(null);
     }
 
-    public Optional<Badge> updateBadge(Long id, Badge badgeDetails) {
-        return badgeRepository.findById(id).map(badge -> {
-            badge.setName(badgeDetails.getName());
-            badge.setDescription(badgeDetails.getDescription());
-            badge.setPoints_required(badgeDetails.getPoints_required());
-            return badgeRepository.save(badge);
-        });
-    }
-
     public void deleteBadge(Long id) {
         badgeRepository.deleteById(id);
     }

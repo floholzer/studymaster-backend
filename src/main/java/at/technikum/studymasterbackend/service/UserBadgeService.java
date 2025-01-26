@@ -31,17 +31,4 @@ public class UserBadgeService {
         userBadge.setAwarded_at(LocalDateTime.now());
         userBadgeRepository.save(userBadge);
     }
-
-    public Optional<UserBadge> updateUserBadge(Long id, UserBadge userBadgeDetails) {
-        return userBadgeRepository.findById(id).map(userBadge -> {
-            userBadge.setBadgeId(userBadgeDetails.getBadgeId());
-            userBadge.setUserId(userBadgeDetails.getUserId());
-            userBadge.setAwarded_at(userBadgeDetails.getAwarded_at());
-            return userBadgeRepository.save(userBadge);
-        });
-    }
-
-    public void deleteUserBadge(Long id) {
-        userBadgeRepository.deleteById(id);
-    }
 }
