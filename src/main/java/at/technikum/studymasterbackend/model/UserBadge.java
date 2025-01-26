@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.data.relational.core.mapping.Column;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -13,7 +14,7 @@ public class UserBadge {
 
     @Id
     private Long id;
-    private Date awarded_at;
+    private LocalDateTime awarded_at;
 
     @Column("user_id")
     private Long userId;

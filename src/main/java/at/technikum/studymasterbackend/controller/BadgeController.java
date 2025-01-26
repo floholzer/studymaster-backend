@@ -21,4 +21,10 @@ public class BadgeController {
         List<Badge> badges = badgeService.getAllBadges();
         return ResponseEntity.ok(badges);
     }
+    @GetMapping("/{badgeId}")
+    public ResponseEntity<Badge> getBadgeById(@PathVariable Long badgeId) {
+        if (badgeId == null) throw new IllegalArgumentException("Badge id cannot be null");
+        Badge badge = badgeService.getBadgeById(badgeId);
+        return ResponseEntity.ok(badge);
+    }
 }
