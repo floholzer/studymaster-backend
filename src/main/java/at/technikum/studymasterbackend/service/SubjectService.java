@@ -3,6 +3,7 @@ import at.technikum.studymasterbackend.model.Task;
 import at.technikum.studymasterbackend.model.Subject;
 import at.technikum.studymasterbackend.repository.SubjectRepository;
 import at.technikum.studymasterbackend.repository.TaskRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,37 +30,33 @@ public class SubjectService {
         return subjectRepository.findBySemesterIdAndStatus(semesterId, status);
     }
 
-//    public void updateSubjectStatus(Long subjectId) {
-//        // Implementiere die Logik zur Aktualisierung des Status
-//    }
+    public void markSubjectCompleted(Long subjectId) {
+        if (subjectId == null) throw new IllegalArgumentException("Subject ID cannot be null");
 
-    public void updateSubjectStatus(Long subjectId) {
+        // Check if all tasks are completed
         boolean allTasksCompleted = taskRepository.findBySubjectId(subjectId)
                 .stream()
                 .allMatch(task -> "completed".equals(task.getStatus()));
 
-        if (allTasksCompleted) {
-            Subject subject = subjectRepository.findById(subjectId)
-                    .orElseThrow(() -> new IllegalArgumentException("Subject not found"));
-            subject.setStatus("completed");
-
-            int totalPoints = taskRepository.findBySubjectId(subjectId)
-                    .stream()
-                    .mapToInt(Task::getPointsPossible)
-                    .sum();
-
-            int earnedPoints = taskRepository.findBySubjectId(subjectId)
-                    .stream()
-                    .mapToInt(Task::getPointsEarned)
-                    .sum();
-
-            double percentage = (totalPoints > 0) ? (earnedPoints * 100.0 / totalPoints) : 0.0;
-
-            String award = calculateAward(percentage);
-            subject.setAward(award);
-
-            subjectRepository.save(subject);
+        if (!allTasksCompleted) {
+            return;
         }
+
+        // Get and update subject
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new EntityNotFoundException("Subject not found"));
+
+        // Calculate points
+        List<Task> tasks = taskRepository.findBySubjectId(subjectId);
+        int totalPoints = tasks.stream().mapToInt(Task::getPointsPossible).sum();
+        int earnedPoints = tasks.stream().mapToInt(Task::getPointsEarned).sum();
+
+        // Calculate award
+        double percentage = totalPoints > 0 ? (earnedPoints * 100.0 / totalPoints) : 0;
+        subject.setAward(calculateAward(percentage));
+        subject.setStatus("completed");
+
+        subjectRepository.save(subject);
     }
 
     private String calculateAward(double percentage) {
