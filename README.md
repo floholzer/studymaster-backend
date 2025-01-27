@@ -2,11 +2,6 @@
 
 This is the backend service for the StudyMaster application, built with Spring Boot.
 
-
-## Installation
-
-WIP
-
 ## Usage
 
 The backend service runs on `http://<hostname>:8080` by default.
@@ -26,20 +21,26 @@ The backend service runs on `http://<hostname>:8080` by default.
 ### Badges
 
 - `GET /badges` - Retrieve all badges.
+- `GET /badges/{userId}` - Retrieve all badges of a user.
+- `GET /badges/{badgeId}` - Retrieve the badge of the given id.
 
 ### Progress
 
 - `GET /progress/{userId}` - Retrieve the progress of a user by ID. Maybe delete later.
 
-### Semester -> Maybe rework?
+### Semester
 
 - `GET /semester` - Body: UserId - Retrieve all semesters of a user.
 - `POST /semester` - Create a new semester.
+- `PUT /semester/{id}` - Update an existing semester.
+- `DELETE /semester/{id}` - Delete a semester.
 
-### Subject -> Maybe rework?
+### Subject
 
 - `GET /subject` - Retrieve all subjects.
 - `POST /subject` - Create a new subject.
+- `PUT /subject/{id}` - Update an existing subject.
+- `DELETE /subject/{id}` - Delete a subject.
 
 ### Tasks
 
