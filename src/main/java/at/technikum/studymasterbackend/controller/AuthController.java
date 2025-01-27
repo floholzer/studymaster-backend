@@ -62,4 +62,6 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Benutzer konnte nicht geladen werden");
     }
+
+
 }

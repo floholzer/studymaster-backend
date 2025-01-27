@@ -10,3 +10,4 @@ public class StudymasterBackendApplication {
         SpringApplication.run(StudymasterBackendApplication.class, args);
     }
 }
+
